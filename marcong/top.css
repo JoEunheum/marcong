@@ -1,0 +1,26 @@
+* {
+  box-sizing: border-box;
+}
+.nounderline{
+  text-decoration: none !important;
+}
+.borderless {
+  border: 0 none;
+}
+.naverbar li{
+  display: inline-block;
+  padding: 5px;
+}
+.naverbar a{
+  display: block;
+  color: black;
+  border-style: hidden hidden solid hidden;
+  border-color: transparent;
+  padding: 14px 16px;
+  font-size: 17px;
+  margin: center;
+}
+.naverbar a:hover{
+  border-color: red;
+  color: red;
+}
