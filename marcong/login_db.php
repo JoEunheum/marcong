@@ -27,6 +27,18 @@ $result = mysqli_query($con,$query);
                         $_SESSION['email']=$email;
                         $_SESSION['admin']=$row['admin'];
                         $_SESSION['name']=$row['name'];
+                        $uid = $row['uid'];
+                        $g_uid = $row['g_uid'];
+                        if(!empty($uid)){
+                          $_SESSION['uid'] = $uid;
+                        }else{
+                          unset($uid);
+                        }
+                        if(!empty($g_uid)){
+                          $_SESSION['uid'] = $g_uid;
+                        }else {
+                          unset($g_uid);
+                        }
                         if(isset($_SESSION['email'])){
                         ?>      <script>
                                         alert("로그인 되었습니다.");
@@ -47,7 +59,7 @@ $result = mysqli_query($con,$query);
                 }else {
                   ?>
                   <script>
-                  alert("아이디 혹은 비밀번호가 잘못되었습니다.");
+                  alert("이메일 혹은 비밀번호가 잘못되었습니다.");
                   history.back();
                 </script>
         <?php
@@ -55,7 +67,7 @@ $result = mysqli_query($con,$query);
         }else{
           ?>
           <script>
-            alert("아이디 혹은 비밀번호가 잘못되었습니다.");
+            alert("이메일 혹은 비밀번호가 잘못되었습니다.");
                 history.back();
                 </script>
 <?php

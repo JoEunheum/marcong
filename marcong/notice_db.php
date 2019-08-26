@@ -43,10 +43,10 @@ $imagePath = "board_img/";
     $check =0;
   }
 if($check==0){
-  $query = "insert into board (division, title, writer, write_day, image_url, comment) values";
+  $query = "insert into notice (division, title, writer, write_day, image_url, comment) values";
   $query = $query."('$division','$title','$writer',now(),'$imageURL','$comment')";
   // 제목 중복 확인 하려면 프라이머리 키 설정해줘야함
-  // $sql = "select count(*) from board where title = '$title'";
+  // $sql = "select count(*) from notice where title = '$title'";
 
   if(mysqli_query($con, $query)){
     ?>

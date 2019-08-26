@@ -16,7 +16,7 @@ if ($con->connect_error) {
 }
 
 $no = $_GET['no'];
-$query_info = "select * from board where no = '$no'";
+$query_info = "select * from notice where no = '$no'";
 $result_set = mysqli_query($con, $query_info);
 $row = mysqli_fetch_assoc($result_set);
 $division = $row['division'];

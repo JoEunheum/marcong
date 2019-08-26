@@ -28,7 +28,7 @@ $number_f = substr($phone_number, 7, 4);
 $idnumber = $_POST['idnumber'];
 $menulist = $_POST['menulist'];
 $item_count = $_POST['selt'];
-$total_price = number_format($_POST['total']);
+$total_price = $_POST['total'];
 
 $query_menu = "SELECT menu, price FROM office_menu WHERE idnumber = '$idnumber';";
 $result_menu = mysqli_query($con, $query_menu);

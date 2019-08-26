@@ -19,6 +19,7 @@ while ($row_time = mysqli_fetch_assoc($result_time)) {
   $basket_time[$i] = $row_time['basket_time'];
 
   if(strpos($basket_time[$i], $date) !== false){
+    echo "data : ".$date.", basket_time : ".$basket_time[$i];
     $query_info_delete = "DELETE FROM basket_info WHERE basket_time = '$basket_time[$i]';";
     mysqli_query($con, $query_info_delete);
     $query_menu_delete = "DELETE FROM basket_menu WHERE basket_time = '$basket_time[$i]';";
@@ -123,7 +124,7 @@ $time_size = sizeof($basket_time);
             </td>
 
           <form action="./reservation_basket.php" method="POST">
-            
+
             <input type="hidden" name="image" value="<?php echo $basket_image[$i]; ?>">
             <input type="hidden" name="idnumber" value="<?php echo $basket_idnumber[$i]; ?>">
             <input type="hidden" name="title" value="<?php echo $basket_name[$i]; ?>">

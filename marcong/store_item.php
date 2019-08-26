@@ -113,7 +113,13 @@ while($row2 = mysqli_fetch_assoc($result_set)){
 }
 $size = sizeof($image);
 
-$query_review = "SELECT name, grade, coment, upload_time FROM review WHERE idnumber = '$idnumber' ORDER BY upload_time DESC;";
+
+$query_count = "SELECT * FROM review WHERE idnumber = '$idnumber';";
+$result_count = mysqli_query($con, $query_count);
+$total_count = mysqli_num_rows($result_count);
+$list_count = 5;
+
+$query_review = "SELECT name, grade, coment, upload_time FROM review WHERE idnumber = '$idnumber' ORDER BY upload_time DESC LIMIT 0, $list_count;";
 $result_review = mysqli_query($con,$query_review);
 $i=0;
 while ($row_review = mysqli_fetch_assoc($result_review)) {
@@ -135,7 +141,7 @@ while ($row_review = mysqli_fetch_assoc($result_review)) {
   }
   $i++;
 }
-$review_size = sizeof($coment);
+$size_review = count($name);
 
 mysqli_close($con);
  ?>
@@ -290,22 +296,34 @@ line-height:100px;
         <br>
         <hr>
 
-        <pre><h5><strong>리뷰</strong> <d class="pull-right">전체 리뷰 <d class="text-warning"><?php echo $review_size; ?></d>  전체 평점 <d class="text-warning"><?php echo $grade; ?></d> <d class="text-secondary"><?php echo $grade_tag; ?></d></d></h5></pre>
+        <pre><h5><strong>리뷰</strong> <d class="pull-right">전체 리뷰 <d class="text-warning"><?php echo $total_count; ?></d>  전체 평점 <d class="text-warning"><?php echo $grade; ?></d> <d class="text-secondary"><?php echo $grade_tag; ?></d></d></h5></pre>
         <hr style="border:0;height:3px;background:#ccc;">
 
         <?php
-        if($review_size == 0){
+        if($total_count == 0){
           ?>
           <h4 class="text-center">리뷰가 없습니다.</h4>
           <hr>
           <?php
         }else{
-          for ($i=0; $i < $review_size; $i++) {
+          for ($i=0; $i < $size_review; $i++) {
             ?>
             <h6><?php echo $upload_time[$i]; ?> <?php echo $name[$i]; ?></h6>
             <h4 class="text-warning"><?php echo $review_grade[$i]; ?> <strong class="text-dark"><?php echo $review_grade_tag[$i]; ?></strong></h4>
             <h5 class="text-secondary"><?php echo $coment[$i]; ?></h5>
             <hr>
+            <?php
+          }
+          ?>
+          <div id="plus_div">
+          </div>
+          <?php
+          if($list_count < $total_count){
+            ?>
+            <div id="reset_div">
+                <input id="plus_value" type="hidden" value="<?php echo $list_count; ?>">
+                <button id="plus_bt"class="btn btn-light btn-block">더보기</button>
+            </div>
             <?php
           }
         }
@@ -405,6 +423,29 @@ for ($i=0; $i < $len; $i++) {
     </footer>
 
     <script type="text/javascript">
+    $("#plus_bt").click(function(){
+      var listcount = Number($('#plus_value').val());
+      $.ajax({
+        type : "POST",
+        url : "store_item_plus.php",
+        data : {listcount : listcount, idnumber : <?php echo $idnumber; ?>},
+        dataType : "text",
+        success : function(data){
+          listcount += 5;
+          $('#plus_value').val(listcount);
+          $('#plus_div').append(data);
+          var plus_sum = $('#plus_sum').val();
+          var total_count = <?php echo $total_count; ?>;
+          if(total_count == plus_sum){
+            $('#reset_div').empty();
+          }
+        },
+        error : function(data){
+          alert('error');
+        }
+      });
+    });
+
       $('#edit').click(function(){
         location.href='store_edit.php?id=<?php echo $idnumber; ?>';
       });
@@ -508,7 +549,7 @@ $(document).ready(function(){
                 for (var i = 0; i < len; i++) {
                   sum+=total[i];
                 }
-                $("#total").val(sum);
+                $("#total").val(sum.toLocaleString());
             }else{
               var value = Number($(this).val());
               var coco =Number($('#selt'+value).val());
@@ -519,7 +560,8 @@ $(document).ready(function(){
                 for (var i = 0; i < len; i++) {
                   sum+=total[i];
                 }
-                $("#total").val(sum);
+
+                $("#total").val(sum.toLocaleString());
               });
             }
           }else{
@@ -534,7 +576,7 @@ $(document).ready(function(){
               total[value]=0;
               }
             }
-            $("#total").val(sum);
+            $("#total").val(sum.toLocaleString());
           }
         });
         <?php

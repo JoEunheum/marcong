@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0,shrink-to-fit=no">
   <title>회원가입</title>
-  <!-- <link rel="stylesheet"type="text/css" href="login.css"> -->
   <!-- 부트스트랩 -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -46,6 +45,7 @@
           <input class="ml-5" type="radio" name="selectRadio" value="office" onclick="signCheck(this)">업체
         </div>
       </div>
+
       <div class="modal fade" id="defaultModal">
           <div class="modal-dialog">
               <div class="modal-content">
@@ -64,6 +64,33 @@
       </div><!-- /.modal -->
       <!--// 모달창 -->
 
+      <!-- The Modal -->
+  <div class="modal fade" id="certificationModal">
+  <div class="modal-dialog modal-dialog-centered">
+  <div id="reset_div" class="modal-content">
+
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <input readonly type="text" class="font-weight-bold" style="border: 0 none; font-size:150%; width:200px;" value="이메일 인증"/>
+      <button type="button" class="close" data-dismiss="modal">&times;</button>
+    </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="form-group">
+          <input type="number" id="certification" class="form-control" placeholder="인증번호를 입력해주세요.">
+        </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <input id="certi_email"type="button" class="btn btn-success" value="확인">
+      </div>
+
+  </div>
+  </div>
+  </div>
+
       <div id="personal">
         <form id="personal_form" method="post" class="form-singup form-horizontal" action="signup_person_db.php">
         <br>
@@ -76,8 +103,14 @@
             </div>
 
             <div class="form-group" id="divId">
-                  <input type="email" class="form-control" id="id" data-rule-required="true" name="email" placeholder="이메일" maxlength="30">
+              <div class="input-group mb-3">
+                <input type="email" class="form-control" id="id" data-rule-required="true" name="email" placeholder="이메일" maxlength="30">
+                <div class="input-group-append">
+                  <button id="email_check"class="btn btn-success" type="button">인증</button>
+                </div>
+                <input id="email_check_val" type="hidden" value="0">
               </div>
+            </div>
 
               <div class="form-group" id="divPassword">
                 <input type="password" class="form-control" id="password" name="excludeHangul" data-rule-required="true" placeholder="비밀번호" maxlength="30">
@@ -230,7 +263,7 @@
                 </div>
 
               <div class="form-group">
-                <input id="subname" name="subname" type="text" placeholder="간단한 소개" class="form-control" maxlength="23"/>
+                <input id="subname" name="subname" type="text" placeholder="간단한 소개" class="form-control"/>
               </div>
 
               <div class="form-group">

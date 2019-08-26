@@ -21,7 +21,7 @@ if($serch == ''){
   $query_office = "SELECT idnumber, name, subname FROM office_info WHERE replace(name, ' ', '') LIKE '%$serch%' OR replace(subname, ' ', '') LIKE '%$serch%' OR replace(workday, ' ', '') LIKE '%$serch%' OR replace(address, ' ', '') LIKE '%$serch%';";
   $result_office = mysqli_query($con, $query_office);
   $count_office = mysqli_num_rows($result_office);
-  echo 'office : '.$count_office.', '; //delete
+  // echo 'office : '.$count_office.', '; //delete
   if($count_office != 0){
     $i=0;
     while($row_office = mysqli_fetch_assoc($result_office)){
@@ -44,7 +44,7 @@ if($serch == ''){
     $query_menu = "SELECT idnumber FROM office_menu WHERE replace(menu, ' ', '') like '%$serch%';";
     $result_menu = mysqli_query($con, $query_menu);
     $count_menu = mysqli_num_rows($result_menu);
-    echo 'menu : '.$count_menu.', '; //delete
+    // echo 'menu : '.$count_menu.', '; //delete
     $i = 0;
     while($row_menu = mysqli_fetch_assoc($result_menu)){
       $idnumber[$i] = $row_menu['idnumber'];
@@ -64,15 +64,22 @@ if($serch == ''){
     }
   }
 
-  $query_board = "SELECT * FROM board WHERE division LIKE '%$serch%' OR replace(title, ' ', '') LIKE '%$serch%';";
+  $query_board = "SELECT * FROM notice WHERE division LIKE '%$serch%' OR replace(title, ' ', '') LIKE '%$serch%' OR replace(comment,' ','') LIKE '%$serch%' ORDER BY no DESC;";
   $result_board = mysqli_query($con, $query_board);
   $count_board = mysqli_num_rows($result_board);
-  echo 'board : '.$count_board; //delete
+  // echo 'board : '.$count_board; //delete
   $i=0;
   while ($row_board = mysqli_fetch_assoc($result_board)) {
+    $no[$i] = $row_board['no'];
     $division[$i] = $row_board['division'];
     $name[$i] = $row_board['title'];
-
+    $writer[$i] = $row_board['writer'];
+    $write_day[$i] = $row_board['write_day'];
+    $look_up[$i] = $row_board['look_up'];
+    $i++;
+  }
+  for($j=$count_board ; $j>0 ; $j--){
+    $tmpno[$count_board-$j]=$j;
   }
 }
 mysqli_close($con);
@@ -145,6 +152,14 @@ mysqli_close($con);
                 </div>
             </div>
           <?php
+          $j = $i+1;
+          if($j%4 == 0 && $j != $count_office){
+            ?>
+          </div>
+          <br>
+          <div class="row">
+          <?php
+          }
         }
          ?>
       </div>
@@ -173,6 +188,14 @@ mysqli_close($con);
                 </div>
             </div>
           <?php
+          $j = $i+1;
+          if($j%4 == 0 && $j != $count_office){
+            ?>
+          </div>
+          <br>
+          <div class="row">
+          <?php
+          }
         }
          ?>
       </div>
@@ -182,7 +205,155 @@ mysqli_close($con);
       ?>
       <h3>공지&이벤트(<?php echo $count_board; ?>)</h3>
       <hr>
+      <table class="table table-hover">
+        <thead class="thead-light">
+          <tr>
+            <th>번호</th>
+            <th>분류</th>
+            <th class="text-center">제목</th>
+            <th class="text-right">작성자</th>
+            <th class="text-center">작성일자</th>
+            <th class="text-center">조회</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+          for ($i=0; $i < $count_board; $i++) {
+            ?>
+            <tr>
+              <th><?php echo $tmpno[$i]; ?></th>
+              <th><?php echo $division[$i]; ?></th>
+              <th class="text-center"><a href="notice_show.php?no=<?php echo $no[$i]; ?>"><?php echo $name[$i]; ?></a></th>
+              <th class="text-right"><?php echo $writer[$i]; ?></th>
+              <th class="text-center"><?php echo $write_day[$i]; ?></th>
+              <th class="text-center"><?php echo $look_up[$i]; ?></th>
+            </tr> <?php
+          }
+          ?>
+        </tbody>
+      </table>
+        <?php
+    }else if($count_office != 0 && $count_board != 0){
+      ?>
+      <h3>마카롱(<?php echo $count_office; ?>)</h3>
+      <hr>
+      <div class="row">
+        <?php
+        for ($i=0; $i < $count_office; $i++) {
+          ?>
+          <div id="re_set" class="col-md-3">
+              <div class="card" style="width:250px;">
 
+                  <h4 class="text-warning"><i class="fas fa-star"> <?php echo $grade[$i]; ?></i></h4>
+
+                  <img style="cursor:pointer" onclick="ope(<?php echo $idnumber[$i]; ?>)" class="card-img-top img-thumbnail" src="<?php echo $image[$i];?>" alt="Card image">
+
+                  <div class="card-body">
+                    <a class="nounderline text-dark" href="store_item.php?id=<?php echo $idnumber[$i]; ?>"><h4 class=" card-title"><?php echo $title[$i]; ?></h4></a>
+                    <p class="card-text text-secondary target"><?php echo $subname[$i]; ?></p>
+                    <pre class="card-text text-secondary"><i class="fas fa-pencil-alt"> <?php echo $count_review[$i]; ?></i>  <i class="fas fa-heart"> <?php echo $office_like[$i]; ?></i>  <i class="fas fa-eye"> <?php echo $look_up[$i]; ?></i></pre>
+                  </div>
+                </div>
+            </div>
+          <?php
+          $j = $i+1;
+          if($j%4 == 0 && $j != $count_office){
+            ?>
+          </div>
+          <br>
+          <div class="row">
+          <?php
+          }
+        }
+         ?>
+      </div>
+      <br>
+      <h3>공지&이벤트(<?php echo $count_board; ?>)</h3>
+      <hr>
+      <table class="table table-hover">
+        <thead class="thead-light">
+          <tr>
+            <th>번호</th>
+            <th>분류</th>
+            <th class="text-center">제목</th>
+            <th class="text-right">작성자</th>
+            <th class="text-center">작성일자</th>
+            <th class="text-center">조회</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+          for ($i=0; $i < $count_board; $i++) {
+            ?>
+            <tr>
+              <th><?php echo $tmpno[$i]; ?></th>
+              <th><?php echo $division[$i]; ?></th>
+              <th class="text-center"><a href="notice_show.php?no=<?php echo $no[$i]; ?>"><?php echo $name[$i]; ?></a></th>
+              <th class="text-right"><?php echo $writer[$i]; ?></th>
+              <th class="text-center"><?php echo $write_day[$i]; ?></th>
+              <th class="text-center"><?php echo $look_up[$i]; ?></th>
+            </tr> <?php
+          }
+          ?>
+        </tbody>
+      </table>
+      <?php
+    }else if($count_office == 0 && $count_menu != 0 && $count_board != 0){
+      ?>
+      <h3>마카롱(<?php echo $count_menu; ?>)</h3>
+      <hr>
+      <div class="row">
+        <?php
+        for ($i=0; $i < $count_menu; $i++) {
+          ?>
+          <div id="re_set" class="col-md-3">
+              <div class="card" style="width:250px;">
+
+                  <h4 class="text-warning"><i class="fas fa-star"> <?php echo $grade[$i]; ?></i></h4>
+
+                  <img style="cursor:pointer" onclick="ope(<?php echo $idnumber[$i]; ?>)" class="card-img-top img-thumbnail" src="<?php echo $image[$i];?>" alt="Card image">
+
+                  <div class="card-body">
+                    <a class="nounderline text-dark" href="store_item.php?id=<?php echo $idnumber[$i]; ?>"><h4 class=" card-title"><?php echo $title[$i]; ?></h4></a>
+                    <p class="card-text text-secondary target"><?php echo $subname[$i]; ?></p>
+                    <pre class="card-text text-secondary"><i class="fas fa-pencil-alt"> <?php echo $count_review[$i]; ?></i>  <i class="fas fa-heart"> <?php echo $office_like[$i]; ?></i>  <i class="fas fa-eye"> <?php echo $look_up[$i]; ?></i></pre>
+                  </div>
+                </div>
+            </div>
+          <?php
+        }
+         ?>
+      </div>
+      <br>
+      <h3>공지&이벤트(<?php echo $count_board; ?>)</h3>
+      <hr>
+      <table class="table table-hover">
+        <thead class="thead-light">
+          <tr>
+            <th>번호</th>
+            <th>분류</th>
+            <th class="text-center">제목</th>
+            <th class="text-right">작성자</th>
+            <th class="text-center">작성일자</th>
+            <th class="text-center">조회</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+          for ($i=0; $i < $count_board; $i++) {
+            ?>
+            <tr>
+              <th><?php echo $tmpno[$i]; ?></th>
+              <th><?php echo $division[$i]; ?></th>
+              <th class="text-center"><a href="notice_show.php?no=<?php echo $no[$i]; ?>"><?php echo $name[$i]; ?></a></th>
+              <th class="text-right"><?php echo $writer[$i]; ?></th>
+              <th class="text-center"><?php echo $write_day[$i]; ?></th>
+              <th class="text-center"><?php echo $look_up[$i]; ?></th>
+            </tr> <?php
+          }
+          ?>
+        </tbody>
+      </table>
       <?php
     }
      ?>

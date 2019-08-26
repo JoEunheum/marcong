@@ -9,7 +9,7 @@ $con=mysqli_connect("localhost","heumheum2","dms1gma2#$","heumDB") or die("fail"
 
 $no = $_GET['no'];
 // 이미지 삭제를 위한 쿼리
-$query_image = "SELECT image_url FROM board WHERE no= $no;";
+$query_image = "SELECT image_url FROM notice WHERE no= $no;";
 $result_image = mysqli_query($con, $query_image);
 $row = mysqli_fetch_assoc($result_image);
 
@@ -58,11 +58,11 @@ $imagePath = "board_img/";
     $check =0;
   }
 if($check==0){
-  $query = "UPDATE board SET title = '$title', division = '$division', image_url = '$imageURL', writer = '$writer', comment = '$comment'  WHERE no = $no;";
+  $query = "UPDATE notice SET title = '$title', division = '$division', image_url = '$imageURL', writer = '$writer', comment = '$comment'  WHERE no = $no;";
   if(mysqli_query($con, $query)){
     ?><script>
     alert("편집되었습니다.");
-    location.replace("./notice.php")</script><?php
+    location.replace("./notice.php?division=all")</script><?php
   }else{
     echo("쿼리오류 발생: " . mysqli_error($con));
   }

@@ -1,29 +1,99 @@
+<!-- <!DOCTYPE html>
 <html>
 <head>
-	<title>BLUEB</title>
-		<link href="/resources/rateit/rateit.css" rel="stylesheet" type="text/css">
-		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width"/>
+<title>Login Demo - Kakao JavaScript SDK</title>
+<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+
 </head>
-
 <body>
-
-
-
-
-	<div class="rateit" data-rateit-value="7.5" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
-
-
-
-	<script type="text/javascript" src="/resources/rateit/jquery.rateit.min.js">
-	</script>
-
-	<script>
-		$('div.rateit, span.rateit').rateit();
-	</script>
+<a id="kakao-login-btn"></a>
+<a href="http://developers.kakao.com/logout"></a>
+<script type='text/javascript'>
+  //<![CDATA[
+    // 사용할 앱의 JavaScript 키를 설정해 주세요.
+    Kakao.init('08d65c3f64046fc30f8aefe7e6b9eb49');  //여기서 아까 발급받은 키 중 javascript키를 사용해준다.
+    // 카카오 로그인 버튼을 생성합니다.
+    Kakao.Auth.createLoginButton({
+      container: '#kakao-login-btn',
+      success: function(authObj) {
+        alert(JSON.stringify(authObj));
+      },
+      fail: function(err) {
+         alert(JSON.stringify(err));
+      }
+    });
+  //]]>
+</script>
 
 </body>
-</html>
+</html> -->
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width"/>
+<title>Custom Login Demo - Kakao JavaScript SDK</title>
+<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+
+</head>
+<body>
+<a id="custom-login-btn" href="javascript:loginWithKakao()">
+<img src="//mud-kage.kakao.com/14/dn/btqbjxsO6vP/KPiGpdnsubSq3a0PHEGUK1/o.jpg" width="300"/>
+</a>
+<script type='text/javascript'>
+  //<![CDATA[
+    // 사용할 앱의 JavaScript 키를 설정해 주세요.
+    Kakao.init('08d65c3f64046fc30f8aefe7e6b9eb49');
+    function loginWithKakao() {
+      // 로그인 창을 띄웁니다.
+      Kakao.Auth.login({
+        success: function(authObj) {
+          alert(JSON.stringify(authObj));
+        },
+        fail: function(err) {
+          alert(JSON.stringify(err));
+        }
+      });
+    };
+  //]]>
+</script>
+
+</body>
+</html> -->
+
+
+<!-- <!DOCTYPE html> GOOGLE
+
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+</head>
+<body>
+    <div>Lorem ipsum</div>
+    <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark">dfd</div>
+    <script>
+        function onSignIn(googleUser) {
+            // Useful data for your client-side scripts:
+            var profile = googleUser.getBasicProfile();
+            console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+            console.log('Full Name: ' + profile.getName());
+            console.log('Given Name: ' + profile.getGivenName());
+            console.log('Family Name: ' + profile.getFamilyName());
+            console.log("Image URL: " + profile.getImageUrl());
+            console.log("Email: " + profile.getEmail());
+
+            // The ID token you need to pass to your backend:
+            var id_token = googleUser.getAuthResponse().id_token;
+            console.log("ID Token: " + id_token);
+        };
+    </script>
+</body>
+</html> -->

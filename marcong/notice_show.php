@@ -10,7 +10,7 @@ if ($con->connect_error) {
     die("Connection failed: " . $con->connect_error);
 }
 $no = $_GET['no'];
-$query_info = "select * from board where no = '$no'";
+$query_info = "SELECT * FROM notice WHERE no = '$no'";
 $result_set = mysqli_query($con, $query_info);
 $row = mysqli_fetch_assoc($result_set);
 $division = $row['division'];
@@ -22,7 +22,7 @@ $look_up = $row['look_up'];
 $comment = $row['comment'];
 
 if(!isset($_COOKIE['notice_look'. $no])){
-  $query_look = "UPDATE board SET look_up = '$look_up'+1 where no = '$no';";
+  $query_look = "UPDATE notice SET look_up = '$look_up'+1 where no = '$no';";
   if(mysqli_query($con, $query_look)){
     setcookie('notice_look' . $no, TRUE, time()+(86400*30),'/');
     $look_up +=1;
@@ -31,7 +31,7 @@ if(!isset($_COOKIE['notice_look'. $no])){
   }
 }
 
-$query = "select count(*) from board";
+$query = "select count(*) from notice";
 $result = mysqli_query($con,$query);
 $row1 = mysqli_fetch_assoc($result);
 $no_count= $row1['count(*)'];
@@ -44,13 +44,13 @@ if($no!=$no_count){
 }
 
 // 이전글
-$query_pre = "select * from board where no = '$no_pre'";
+$query_pre = "select * from notice where no = '$no_pre'";
 $result_pre = mysqli_query($con,$query_pre);
 $row_pre = mysqli_fetch_assoc($result_pre);
 $pre_title = $row_pre['title'];
 
 // 다음글
-$query_next = "select * from board where no = '$no_next'";
+$query_next = "select * from notice where no = '$no_next'";
 $result_next = mysqli_query($con,$query_next);
 $row_next = mysqli_fetch_assoc($result_next);
 $next_title = $row_next['title'];

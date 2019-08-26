@@ -1,7 +1,7 @@
 <?php
 session_start();
 if(!isset($_SESSION['email'])) {
-	echo "<meta http-equiv='refresh' content='0;url=store.php'>";
+	echo "<meta http-equiv='refresh' content='0;url=main.php'>";
 	exit;
 }else{
 	$email = $_SESSION['email'];
@@ -21,6 +21,7 @@ if ($con->connect_error) {
 $query_look = "SELECT reservation_number, reser_day, title, idnumber,  price, status FROM reservation_look WHERE email = '$email' ORDER BY reser_day DESC;";
 $result_look = mysqli_query($con, $query_look);
 $today = date("Y-m-d");
+
 $i=0;
 while($row_look = mysqli_fetch_assoc($result_look)){
 	$reservation_number[$i] = $row_look['reservation_number'];
@@ -29,13 +30,16 @@ while($row_look = mysqli_fetch_assoc($result_look)){
 	$idnumber[$i] = $row_look['idnumber'];
 	$price[$i] = number_format($row_look['price']);
 	$status[$i] = $row_look['status'];
-
+	$timestamp = strtotime("$reservation_day[$i] +15 days");
+	$timedate = date("Y-m-d", $timestamp);
+	// $timedate = date("Y-m-d", $timestamp);
+	echo $timedate;
 	if($today > $reservation_day[$i]){
 		//예약한 날로부터 다음날
 		if($status[$i]=='O'){
-			$query_status = "UPDATE reservation_look SET status = 'E' WHERE reservation_number = '$reservation_number[$i]';";
+			$query_status = "UPDATE reservation_look SET status = 'N' WHERE reservation_number = '$reservation_number[$i]';";
 			mysqli_query($con,$query_status);
-			$status[$i]='E';
+			$status[$i]='N';
 		}
 	}
 $query_review = "SELECT grade, coment FROM review WHERE reservation_number = '$reservation_number[$i]';";
@@ -106,6 +110,7 @@ mysqli_close($con);
            <a href="./mypage.php" style="border: 0 none;" class="list-group-item list-group-item-action">개인정보변경</a>
            <a href="./wishlist.php" style="border: 0 none;" class="list-group-item list-group-item-action">관심상품</a>
            <a href="./lookup.php" style="border: 0 none;" class="active list-group-item list-group-item-action"><h5>예약조회</h5></a>
+					 <a href="./secession.php" style="border: 0 none;" class="list-group-item list-group-item-action">회원탈퇴</a>
          </ul>
        </div>
 
@@ -202,9 +207,13 @@ mysqli_close($con);
 											?>
 											<p class="text-danger">예약취소</p>
 											<?php
-										}else{
+										}else if($status[$i]=='E' || $status[$i]=='W'){
 											?>
 											<p class="text-success">수령완료</p>
+											<?php
+										}else{
+											?>
+											<p class="text-danger">미수령</p>
 											<?php
 										}
 										?>
@@ -239,6 +248,12 @@ mysqli_close($con);
 											?>
 											<button data-id="<?php echo $reservation_number[$i]; ?>" data-office = "<?php echo $idnumber[$i]; ?>" data-grade ="<?php echo $grade[$i]; ?>" data-coment = "<?php echo $coment[$i]; ?>" class="btn btn-primary" type="button" name="item_edit">리뷰수정</button>
 											<button data-id="<?php echo $reservation_number[$i]; ?>" data-office = "<?php echo $idnumber[$i]; ?>" class="btn btn-danger" type="button" name="item_del">리뷰삭제</button>
+											<?php
+										}
+
+										if($status[$i] == 'N'){
+											?>
+											<button data-id="<?php echo $reservation_number[$i]; ?>" type="button" class="btn btn-success"name="receive">상품수령</button>
 											<?php
 										}
 										?>

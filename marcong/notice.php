@@ -27,8 +27,8 @@
       <hr>
       <select class="custom-control-select" name = "division" id="division">
         <option value="all">전체</option>
-        <option value="notice">공지</option>
-        <option value="event">이벤트</option>
+        <option value="공지">공지</option>
+        <option value="이벤트">이벤트</option>
       </select>
 
       <table class="table table-hover">
@@ -55,21 +55,36 @@
             die("Connection failed: " . $con->connect_error);
         }
         $division_after = $_GET['division'];
+        $page = ($_GET['page'])?$_GET['page']:1;
+        $list = 10;
+        $block = 2;
 
         ?><script>
           $('#division').val('<?php echo $division_after; ?>')
         </script> <?php
 
         if($division_after!='all'){
-          if($division_after=='notice'){
-            $division_after = '공지';
-          }else{
-            $division_after = '이벤트';
-          }
-          $query = "SELECT no,division,title,writer,write_day,look_up FROM board WHERE division = '$division_after' ORDER BY no DESC;";
+          $query = "SELECT no,division,title,writer,write_day,look_up FROM notice WHERE division = '$division_after' ORDER BY no DESC;";
           $result_set = mysqli_query($con, $query);
+          $total_count = mysqli_num_rows($result_set);
+
+          $pageNum = ceil($total_count/$list); // 총 페이지
+          $blockNum = ceil($pageNum/$block); // 총 블록
+          $nowBlock = ceil($page/$block);
+          $s_page = ($nowBlock * $block) - ($block - 1);
+          if ($s_page <= 1) {
+            $s_page = 1;
+          }
+          $e_page = $nowBlock*$block;
+          if ($pageNum <= $e_page) {
+            $e_page = $pageNum;
+          }
+          $s_point = ($page-1) * $list;
+          $query_division = "SELECT no,division,title,writer,write_day,look_up FROM notice WHERE division = '$division_after' ORDER BY no DESC LIMIT $s_point, $list;";
+          $result_division = mysqli_query($con, $query_division);
+
           $i=0;
-          while($row = mysqli_fetch_assoc($result_set)){
+          while($row = mysqli_fetch_assoc($result_division)){
             $no[$i] = $row['no'];
             $division[$i] = $row['division'];
             $title[$i] = $row['title'];
@@ -79,16 +94,32 @@
             $i++;
           }
           $len = sizeof($no);
-          for($j=$len;$j>0;$j--){
-            $tmpno[$len-$j]=$j;
-          }
+          // for($j=$len;$j>0;$j--){
+          //   $tmpno[$len-$j]=$j;
+          // }
           mysqli_close($con);
 
         }else{
-          $query = "select no,division,title,writer,write_day,look_up from board ORDER BY no DESC;";
+          $query = "SELECT no,division,title,writer,write_day,look_up FROM notice ORDER BY no DESC;";
           $result_set = mysqli_query($con, $query);
+          $total_count = mysqli_num_rows($result_set);
+
+          $pageNum = ceil($total_count/$list); // 총 페이지
+          $blockNum = ceil($pageNum/$block); // 총 블록
+          $nowBlock = ceil($page/$block);
+          $s_page = ($nowBlock * $block) - ($block - 1);
+          if ($s_page <= 1) {
+            $s_page = 1;
+          }
+          $e_page = $nowBlock*$block;
+          if ($pageNum <= $e_page) {
+            $e_page = $pageNum;
+          }
+          $s_point = ($page-1) * $list;
+          $query_notice = "SELECT no,division,title,writer,write_day,look_up FROM notice ORDER BY no DESC LIMIT $s_point, $list;";
+          $result_notice = mysqli_query($con, $query_notice);
           $i=0;
-          while($row = mysqli_fetch_assoc($result_set)){
+          while($row = mysqli_fetch_assoc($result_notice)){
             $no[$i] = $row['no'];
             $division[$i] = $row['division'];
             $title[$i] = $row['title'];
@@ -99,9 +130,16 @@
           }
           $len = sizeof($no);
 
-          for($j=$len ; $j>0; $j--){
-            $tmpno[$len-$j]=$j;
-          }
+          // if($total_count > $len){
+          //     $plus = $total_count-$len;
+          //     for($j=$len ; $j>0; $j--){
+          //       $tmpno[$len-$j]=$j+$plus;
+          //     }
+          // }else{
+          //
+          // }
+
+
           mysqli_close($con);
         }
         ?>
@@ -110,7 +148,7 @@
           <?php for ($i=0; $i < $len; $i++) {
             ?>
             <tr>
-              <th><?php echo $tmpno[$i]; ?></th>
+              <th><?php echo $no[$i]; ?></th>
               <th><?php echo $division[$i]; ?></th>
               <th class="text-center"><a href="notice_show.php?no=<?php echo $no[$i]; ?>"><?php echo $title[$i]; ?></a></th>
               <th class="text-right"><?php echo $writer[$i]; ?></th>
@@ -125,13 +163,28 @@
       <?php if(isset($_SESSION['admin'])){?>
       <input type="button" class="btn btn-primary pull-right" value="글쓰기" onClick="javascript:location.href='notice_write.php'"/><?php
     }?>
-        <ul class="pagination justify-content-center">
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item"><a class="page-link" href="#">4</a></li>
-          <li class="page-item"><a class="page-link" href="#">5</a></li>
-        </ul>
+
+    <ul class="pagination justify-content-center">
+      <?php
+      if($s_page != 1){
+        ?>
+        <li class="page-item"><a class="page-link" href="<?php $PHP_SELP?>?page=<?php echo $s_page-1; ?>&division=<?php echo $division_after; ?>">이전</a></li>
+        <?php
+      }
+      for ($p=$s_page; $p<=$e_page; $p++) {
+        ?>
+        <li class="page-item"><a class="page-link" href="<?php $PHP_SELP?>?page=<?php echo $p;?>&division=<?php echo $division_after; ?>"><?php echo $p;?></a></li>
+        <?php
+      }
+      if($e_page != $pageNum){
+        ?>
+        <li class="page-item"><a class="page-link" href="<?php $PHP_SELP?>?page=<?php echo $e_page+1; ?>&division=<?php echo $division_after; ?>">다음</a></li>
+        <?php
+      }
+      ?>
+
+    </ul>
+
     </div>
 
     <footer>  <?php include "footer.php" ?></footer>
@@ -139,7 +192,7 @@
     <script>
       $('#division').change(function(){
         var value = $(this).val();
-        location.replace("./notice.php?division="+value);
+        location.replace("./notice.php?page=1&division="+value);
       });
     </script>
 

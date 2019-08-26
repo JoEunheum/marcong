@@ -3,12 +3,6 @@ $(function() {
   var modalContents = $(".modal-contents");
   var modal = $("#defaultModal");
 
-  $("#subname").on('keyup',function(){
-    if($(this).val().length >23){
-      $(this).val($(this).val().substr(0,23));
-    }
-  });
-
 
   $('.onlyAlphabetAndNumber').keyup(function(event) {
     if (!(event.keyCode >= 37 && event.keyCode <= 40)) {

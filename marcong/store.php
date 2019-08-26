@@ -74,7 +74,6 @@
 </div>
 <br>
 
-      <div class="row">
         <?php
         $servername = "localhost";
         $username = "heumheum2";
@@ -86,11 +85,16 @@
         if ($con->connect_error) {
             die("Connection failed: " . $con->connect_error);
         }
+        $query_limit = "SELECT * FROM office_item;";
+        $result_limit = mysqli_query($con, $query_limit);
+        $total_count = mysqli_num_rows($result_limit);
+        $listcount = 12;
+
         if(!isset($_GET['sort'])){
-          $query = "SELECT * FROM office_item ORDER BY today_update DESC;";
+          $query = "SELECT * FROM office_item ORDER BY today_update DESC LIMIT 0, $listcount;";
         }else{
           $sort = $_GET['sort'];
-          $query = "SELECT * FROM office_item ORDER BY $sort DESC;";
+          $query = "SELECT * FROM office_item ORDER BY $sort DESC LIMIT 0, $listcount;";
           ?>
           <script>
             $('#sort').val('<?php echo $sort; ?>');
@@ -98,6 +102,7 @@
           <?php
         }
         $result_set = mysqli_query($con, $query);
+
 
         $i=0;
         while($row = mysqli_fetch_assoc($result_set)){
@@ -122,10 +127,12 @@
       }
       $len = sizeof($name);
       $today = date('Y-m-d');
-
+      ?>
+      <div class="row">
+        <?php
         for ($i=0; $i < $len; $i++) {
           ?>
-          <div id="re_set" class="col-md-3">
+          <div class="col-md-3">
               <div class="card" style="width:250px;">
 
                   <h4 class="text-warning"><i class="fas fa-star"> <?php echo $grade[$i]; ?></i></h4>
@@ -145,17 +152,68 @@
                     <pre class="card-text text-secondary"><i class="fas fa-pencil-alt"> <?php echo $review[$i]; ?></i>  <i class="fas fa-heart"> <?php echo $office_like[$i]; ?></i>  <i class="fas fa-eye"> <?php echo $look_up[$i]; ?></i></pre>
                   </div>
                 </div>
-            </div><?php
+            </div>
+            <?php
+            $j = $i+1;
+            if($j%4 == 0 && $j != $len){
+              ?>
+            </div>
+            <br>
+            <div class="row">
+            <?php
+            }
         }
         mysqli_close($con);
         ?>
       </div>
+      <br>
+      <div id="plus_div" class="row">
+      </div>
+      <?php
+      if($listcount < $total_count){
+        ?>
+        <div id="reset_div" class="row">
+          <div class="col">
+            <br>
+            <input id="plus_value" type="hidden" value="<?php echo $listcount; ?>">
+            <input id="sort_value" type="hidden" value="<?php echo $sort; ?>">
+            <button id="plus_bt"class="btn btn-light btn-block">더보기</button>
+          </div>
+        </div>
+        <?php
+      }
+      ?>
+
     </div>
     <footer>
       <?php include "footer.php" ?>
     </footer>
 
     <script>
+    $("#plus_bt").click(function(){
+      var listcount = Number($('#plus_value').val());
+      var sort = $('#sort_value').val();
+      $.ajax({
+        type : "POST",
+        url : "store_plus.php",
+        data : {listcount : listcount, sort : sort},
+        dataType : "text",
+        success : function(data){
+          listcount += 12;
+          $('#plus_value').val(listcount);
+          $('#plus_div').append(data);
+          var plus_sum = $('#plus_sum').val();
+          var total_count = <?php echo $total_count; ?>;
+          if(total_count == plus_sum){
+            $('#reset_div').empty();
+          }
+        },
+        error : function(data){
+          alert('error');
+        }
+      });
+    });
+
     function upload(num){
       $.ajax({
         type:"GET",

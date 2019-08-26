@@ -30,8 +30,21 @@ if($_POST['password'] != ""){
     </script>
     <?php
   }
-}else{
+}else if($birth != "0000-00-00"){
   $query_person = "UPDATE personal_info SET phone_number = '$phone_number', date_of_birth = '$birth' WHERE email = '$email';";
+
+  if(!mysqli_query($con,$query_person)){
+    echo "쿼리문 오류 :".mysqli_error($con);
+  }else{
+    ?>
+    <script>
+      alert("변경되었습니다.");
+      location.replace("./mypage.php");
+    </script>
+    <?php
+  }
+}else{
+  $query_person = "UPDATE personal_info SET phone_number = '$phone_number' WHERE email = '$email';";
 
   if(!mysqli_query($con,$query_person)){
     echo "쿼리문 오류 :".mysqli_error($con);

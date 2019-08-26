@@ -15,7 +15,7 @@ if ($con->connect_error) {
     die("Connection failed: " . $con->connect_error);
 }
 $no = $_GET['no'];
-$query_info = "select image_url from board where no = '$no'";
+$query_info = "select image_url from notice where no = '$no'";
 $result_set = mysqli_query($con, $query_info);
 $row = mysqli_fetch_assoc($result_set);
 
@@ -30,9 +30,9 @@ if($imageURL){
 	  </script> <?php
 	  mysqli_close($con);
 	}else{
-	  $query_delete = "delete from board where no= '$no';";
+	  $query_delete = "delete from notice where no= '$no';";
 	  $result_delete = mysqli_query($con,$query_delete);
-	  $query_increment = "alter table board auto_increment=1;";
+	  $query_increment = "alter table notice auto_increment=1;";
 	  $result_increment = mysqli_query($con,$query_increment);
 	  ?>
 	  <script>
@@ -43,9 +43,9 @@ if($imageURL){
 	  mysqli_close($con);
 	}
 }else{
-	$query_delete = "delete from board where no= '$no';";
+	$query_delete = "delete from notice where no= '$no';";
 	mysqli_query($con,$query_delete);
-	$query_increment = "alter table board auto_increment=1;";
+	$query_increment = "alter table notice auto_increment=1;";
 	mysqli_query($con,$query_increment);
 	?>
 	<script>

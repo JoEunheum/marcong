@@ -39,7 +39,7 @@
                   <li class="list-group-item borderless"><a class="text-dark nounderline" href="wishlist.php">관심상품</a></li>
                   <?php
                 }?>
-                <li class="list-group-item borderless"><a class="text-dark nounderline" href="board.php">Q&A</a></li>
+                <li class="list-group-item borderless"><a class="text-dark nounderline" href="board.php">FAQ</a></li>
                 </ul>
               </div>
               <div class="col-sm-1"></div>
@@ -47,7 +47,7 @@
               <div class="search-container">
                 <form method="get" action="search_page.php">
                   <div class="input-group-prepend">
-                    <input type="text" placeholder="Search.." name="search">
+                    <input type="text" placeholder="마카롱 및 업체 검색..." name="search">
                       <button class="btn btn-secondary" type="submit"><i class="fa fa-search"></i></button>
                     </div>
                 </form>
@@ -73,7 +73,7 @@
             <li class="nav-item">
               <a class="nav-link" href="store.php">마카롱</a></li>
             <li class="nav-item">
-              <a class="nav-link" href="notice.php?division=all">공지&이벤트</a></li>
+              <a class="nav-link" href="notice.php?page=1&division=all">공지&이벤트</a></li>
           </ul>
         </nav>
       </div>

@@ -1,7 +1,7 @@
 <?php
 session_start();
 if(!isset($_SESSION['email'])) {
-	echo "<meta http-equiv='refresh' content='0;url=store.php'>";
+	echo "<meta http-equiv='refresh' content='0;url=main.php'>";
 	exit;
 }
 $con=mysqli_connect("localhost","heumheum2","dms1gma2#$","heumDB") or die("fail");
@@ -75,6 +75,7 @@ if(count($idnumber)!=0){
            <a href="./mypage.php" style="border: 0 none;" class="list-group-item list-group-item-action">개인정보변경</a>
            <a href="./wishlist.php" style="border: 0 none;" class="active list-group-item list-group-item-action"><h5>관심상품</h5></a>
            <a href="./lookup.php" style="border: 0 none;" class="list-group-item list-group-item-action">예약조회</a>
+					 <a href="./secession.php" style="border: 0 none;" class="list-group-item list-group-item-action">회원탈퇴</a>
          </ul>
        </div>
 
