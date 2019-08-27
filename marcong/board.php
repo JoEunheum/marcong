@@ -61,7 +61,7 @@ transition: max-height 0.2s ease-out;
       <?php include "sidemenu.php" ?>
     </div>
 
-    <div class="container" style="height : 700px;">
+    <div class="container" style="height : 1000px;">
       <h3>자주 묻는 질문</h3>
       <hr>
       <button class="accordion">Q. 말콩은 어떤 서비스인가요?</button>

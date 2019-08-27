@@ -33,7 +33,6 @@ while($row_look = mysqli_fetch_assoc($result_look)){
 	$timestamp = strtotime("$reservation_day[$i] +15 days");
 	$timedate = date("Y-m-d", $timestamp);
 	// $timedate = date("Y-m-d", $timestamp);
-	echo $timedate;
 	if($today > $reservation_day[$i]){
 		//예약한 날로부터 다음날
 		if($status[$i]=='O'){

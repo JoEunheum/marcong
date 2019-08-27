@@ -172,6 +172,7 @@
                        <option value="yahoo.co.kr">yahoo.co.kr</option>
                        <option value="nate.com">nate.com</option>
                        <option value="gmail.com">gmail.com</option>
+                       <option value="daum.net">daum.net</option>
                        <option value="direct">직접입력</option>
                      </select>
                    </div>
