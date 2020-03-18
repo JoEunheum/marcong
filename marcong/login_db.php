@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
 $username = "heumheum2";
-$password = "dms1gma2#$";
+$password = "password";
 $dbname = "heumDB";
 
 // Create connection

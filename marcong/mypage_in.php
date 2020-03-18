@@ -5,7 +5,7 @@ $email = $_SESSION['email'];
 
 $servername = "localhost";
 $username = "heumheum2";
-$password = "dms1gma2#$";
+$password = "password";
 $dbname = "heumDB";
 
 // Create connection
