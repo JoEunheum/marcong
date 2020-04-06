@@ -2,12 +2,12 @@
 
 > 맛집 마카롱을 줄서서 먹는 것 보단 예약을 해서 먹고 싶다는 생각으로 만들어진 웹사이트입니다.
 
-<img src="/home.png" title="home-page" />
-<img src="/store.png" title="store-page" />
+<img src="public/home.png" title="home-page" />
+<img src="public/store.png" title="store-page" />
 
 ## 사용 기술
 
-- Framework & Library : Bootstrap, PHPMailer
+- Library : Bootstrap, PHPMailer
 - Language : JavaScript, jQuery, css, Php
 - Database : mariaDB
 - Server : Ubuntu
